@@ -1,0 +1,25 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "pitakap-global",
+          "appId": "1:881086790103:android:32d54f9f8d3d912b3e7392",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "pitakap-global",
+          "configurations": {
+            "android": "1:881086790103:android:32d54f9f8d3d912b3e7392",
+            "ios": "1:881086790103:ios:c910e4372fb323163e7392"
+          }
+        }
+      }
+    }
+  }
+}

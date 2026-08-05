@@ -1,4 +1,4 @@
-package com.example.pitakapflutter
+package com.jamagno.pitakap
 
 import io.flutter.embedding.android.FlutterActivity
 
