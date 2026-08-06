@@ -1,3 +1,28 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "Cobalt2",
+  "dart.customDartDapPath": null,
+  "files.trimTrailingWhitespace": false,
+  "files.trimFinalNewlines": false,
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [80],
+    "editor.selectionHighlight": false,
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off"
+  },
+  "dart.previewFlutterUiGuides": true,
+  "dart.previewFlutterUiGuidesCustomTracking": true,
+  "editor.guides.bracketPairs": "active",
+  "git.ignoreMissingGitWarning": true,
+  "security.workspace.trust.untrustedFiles": "open",
+  "git.openRepositoryInParentFolders": "never",
+  "dart.debugExternalPackageLibraries": false,
+  "dart.debugSdkLibraries": false,
+  "workbench.editorAssociations": {
+    "*.ttf": "default"
+  },
+  "git.autofetch": true,
+  "git.enableSmartCommit": true
 }

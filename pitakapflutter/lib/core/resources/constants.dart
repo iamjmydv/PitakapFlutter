@@ -53,20 +53,6 @@ class Constants {
     'other': Icons.category_outlined,
   };
 
-  static const Map<String, Color> categoryColors = {
-    'entertainment': Color(0xFFE50914),
-    'utilities': Color(0xFFFFB300),
-    'health': Color(0xFFE91E63),
-    'productivity': Color(0xFF3F51B5),
-    'education': Color(0xFF009688),
-    'food': Color(0xFFFF7043),
-    'transport': Color(0xFF42A5F5),
-    'groceries': Color(0xFF66BB6A),
-    'shopping': Color(0xFFAB47BC),
-    'bills': Color(0xFF8D6E63),
-    'other': Color(0xFF78909C),
-  };
-
   static const Map<String, IconData> subscriptionIcons = {
     'movie': Icons.movie_outlined,
     'music': Icons.music_note_outlined,
@@ -80,15 +66,4 @@ class Constants {
     'book': Icons.menu_book_outlined,
     'other': Icons.subscriptions_outlined,
   };
-
-  static const List<Color> subscriptionColors = [
-    Color(0xFFE50914),
-    Color(0xFF1DB954),
-    Color(0xFF1976D2),
-    Color(0xFFFF9800),
-    Color(0xFF9C27B0),
-    Color(0xFF00BCD4),
-    Color(0xFFF44336),
-    Color(0xFF607D8B),
-  ];
 }
