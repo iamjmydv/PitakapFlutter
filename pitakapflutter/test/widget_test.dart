@@ -4,11 +4,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:pitakapflutter/core/providers/app_providers.dart';
+import 'package:pitakapflutter/core/providers/onboarding_providers.dart';
 import 'package:pitakapflutter/core/providers/settings_providers.dart';
 import 'package:pitakapflutter/core/resources/constants.dart';
 import 'package:pitakapflutter/core/resources/keys.dart';
 import 'package:pitakapflutter/core/resources/strings.dart';
 import 'package:pitakapflutter/core/theme/app_theme.dart';
+import 'package:pitakapflutter/feature/onboarding/presentation/onboarding_page.dart';
 import 'package:pitakapflutter/main.dart';
 
 Future<ProviderContainer> containerWith(Map<String, Object> values) async {
@@ -27,6 +29,8 @@ Future<Widget> appWith(Map<String, Object> values) async {
     child: const PitakapApp(),
   );
 }
+
+const Map<String, Object> onboarded = {Keys.prefsOnboardingSeen: true};
 
 Future<void> pumpPastSplash(WidgetTester tester) async {
   await tester.pump(Constants.splashMinimumDuration);
@@ -117,7 +121,7 @@ void main() {
 
   group('routing', () {
     testWidgets('splash shows the brand before routing away', (tester) async {
-      await tester.pumpWidget(await appWith({}));
+      await tester.pumpWidget(await appWith(onboarded));
       await tester.pump();
 
       expect(find.text(Strings.appName), findsOneWidget);
@@ -128,7 +132,7 @@ void main() {
     });
 
     testWidgets('splash routes into the dashboard shell', (tester) async {
-      await tester.pumpWidget(await appWith({}));
+      await tester.pumpWidget(await appWith(onboarded));
       await pumpPastSplash(tester);
 
       expect(find.byType(NavigationBar), findsOneWidget);
@@ -137,7 +141,7 @@ void main() {
     });
 
     testWidgets('bottom navigation reaches every tab', (tester) async {
-      await tester.pumpWidget(await appWith({}));
+      await tester.pumpWidget(await appWith(onboarded));
       await pumpPastSplash(tester);
 
       final tabs = <IconData, String>{
@@ -157,7 +161,7 @@ void main() {
     });
 
     testWidgets('a visited tab stays alive off screen', (tester) async {
-      await tester.pumpWidget(await appWith({}));
+      await tester.pumpWidget(await appWith(onboarded));
       await pumpPastSplash(tester);
 
       expect(
@@ -181,11 +185,108 @@ void main() {
     });
 
     testWidgets('app renders in dark mode when persisted', (tester) async {
-      await tester.pumpWidget(await appWith({Keys.prefsThemeMode: 'dark'}));
+      await tester.pumpWidget(
+        await appWith({...onboarded, Keys.prefsThemeMode: 'dark'}),
+      );
       await pumpPastSplash(tester);
 
       final context = tester.element(find.byType(NavigationBar));
       expect(Theme.of(context).brightness, Brightness.dark);
+    });
+  });
+
+  group('onboardingSeenProvider', () {
+    test('defaults to false when nothing is stored', () async {
+      final container = await containerWith({});
+      addTearDown(container.dispose);
+
+      expect(container.read(onboardingSeenProvider), isFalse);
+    });
+
+    test('restores the persisted flag', () async {
+      final container = await containerWith(onboarded);
+      addTearDown(container.dispose);
+
+      expect(container.read(onboardingSeenProvider), isTrue);
+    });
+
+    test('markSeen persists the flag', () async {
+      final container = await containerWith({});
+      addTearDown(container.dispose);
+
+      await container.read(onboardingSeenProvider.notifier).markSeen();
+
+      expect(container.read(onboardingSeenProvider), isTrue);
+      expect(
+        container
+            .read(sharedPreferencesProvider)
+            .getBool(Keys.prefsOnboardingSeen),
+        isTrue,
+      );
+    });
+  });
+
+  group('onboarding', () {
+    testWidgets('first launch lands on onboarding, not the shell', (
+      tester,
+    ) async {
+      await tester.pumpWidget(await appWith({}));
+      await pumpPastSplash(tester);
+
+      expect(find.text(Strings.onboardingSubscriptionsTitle), findsOneWidget);
+      expect(find.text(Strings.onboardingNext), findsOneWidget);
+      expect(find.byType(NavigationBar), findsNothing);
+    });
+
+    testWidgets('advancing through every slide reveals the final call to '
+        'action', (tester) async {
+      await tester.pumpWidget(await appWith({}));
+      await pumpPastSplash(tester);
+
+      for (var i = 0; i < onboardingSlides.length - 1; i++) {
+        expect(find.text(Strings.onboardingNext), findsOneWidget);
+        await tester.tap(find.text(Strings.onboardingNext));
+        await tester.pumpAndSettle();
+      }
+
+      expect(find.text(Strings.onboardingNext), findsNothing);
+      expect(find.text(Strings.onboardingStart), findsOneWidget);
+    });
+
+    testWidgets('finishing marks onboarding seen and opens the shell', (
+      tester,
+    ) async {
+      await tester.pumpWidget(await appWith({}));
+      await pumpPastSplash(tester);
+
+      for (var i = 0; i < onboardingSlides.length - 1; i++) {
+        await tester.tap(find.text(Strings.onboardingNext));
+        await tester.pumpAndSettle();
+      }
+
+      await tester.tap(find.text(Strings.onboardingStart));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NavigationBar), findsOneWidget);
+      expect(find.text(Strings.dashboardTitle), findsWidgets);
+
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getBool(Keys.prefsOnboardingSeen), isTrue);
+    });
+
+    testWidgets('skipping marks onboarding seen and opens the shell', (
+      tester,
+    ) async {
+      await tester.pumpWidget(await appWith({}));
+      await pumpPastSplash(tester);
+
+      await tester.tap(find.text(Strings.onboardingSkip));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NavigationBar), findsOneWidget);
+
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getBool(Keys.prefsOnboardingSeen), isTrue);
     });
   });
 }

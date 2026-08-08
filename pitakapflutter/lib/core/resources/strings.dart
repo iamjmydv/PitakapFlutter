@@ -2,6 +2,25 @@ class Strings {
   static const String appName = 'Pitakap';
   static const String appTagline = 'Your wallet, tracked';
 
+  static const String onboardingSkip = 'Skip';
+  static const String onboardingNext = 'Next';
+  static const String onboardingStart = 'Get Started';
+
+  static const String onboardingSubscriptionsTitle = 'Track every subscription';
+  static const String onboardingSubscriptionsBody =
+      'Netflix, Spotify, utilities, insurance — keep every recurring bill in '
+      'one place and see what it truly costs you each month.';
+
+  static const String onboardingRemindersTitle = 'Never miss a due date';
+  static const String onboardingRemindersBody =
+      'Get a reminder days before a renewal hits your account, so a payment '
+      'never catches you by surprise again.';
+
+  static const String onboardingExpensesTitle = 'See where your money goes';
+  static const String onboardingExpensesBody =
+      'Log what you spend in two taps and watch it break down by category, '
+      'day by day.';
+
   static const String navDashboard = 'Home';
   static const String navSubscriptions = 'Subs';
   static const String navExpenses = 'Expenses';

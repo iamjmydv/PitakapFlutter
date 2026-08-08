@@ -5,6 +5,7 @@ import 'package:pitakapflutter/core/router/app_routes.dart';
 import 'package:pitakapflutter/core/router/main_shell.dart';
 import 'package:pitakapflutter/feature/dashboard/presentation/dashboard_page.dart';
 import 'package:pitakapflutter/feature/expense/presentation/expenses_page.dart';
+import 'package:pitakapflutter/feature/onboarding/presentation/onboarding_page.dart';
 import 'package:pitakapflutter/feature/profile/presentation/settings_page.dart';
 import 'package:pitakapflutter/feature/splash/presentation/splash_page.dart';
 import 'package:pitakapflutter/feature/stats/presentation/stats_page.dart';
@@ -23,6 +24,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.splash,
         builder: (context, state) => const SplashPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.onboarding,
+        builder: (context, state) => const OnboardingPage(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>

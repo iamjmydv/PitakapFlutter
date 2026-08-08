@@ -1,27 +1,29 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pitakapflutter/core/providers/onboarding_providers.dart';
 import 'package:pitakapflutter/core/resources/constants.dart';
 import 'package:pitakapflutter/core/resources/strings.dart';
 import 'package:pitakapflutter/core/router/app_routes.dart';
 import 'package:pitakapflutter/core/theme/app_theme.dart';
 import 'package:pitakapflutter/core/widgets/app_logo.dart';
 
-class SplashPage extends StatefulWidget {
+class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
+  ConsumerState<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> {
+class _SplashPageState extends ConsumerState<SplashPage> {
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    _timer = Timer(Constants.splashMinimumDuration, _openDashboard);
+    _timer = Timer(Constants.splashMinimumDuration, _openNextRoute);
   }
 
   @override
@@ -30,9 +32,13 @@ class _SplashPageState extends State<SplashPage> {
     super.dispose();
   }
 
-  void _openDashboard() {
+  void _openNextRoute() {
     if (!mounted) return;
-    context.go(AppRoutes.dashboard);
+
+    final hasSeenOnboarding = ref.read(onboardingSeenProvider);
+    context.go(
+      hasSeenOnboarding ? AppRoutes.dashboard : AppRoutes.onboarding,
+    );
   }
 
   @override
