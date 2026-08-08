@@ -5,6 +5,8 @@ class Constants {
   static const String currencySymbol = '₱';
   static const int defaultReminderDaysBefore = 3;
 
+  static const Duration splashMinimumDuration = Duration(milliseconds: 1200);
+
   static const List<String> billingCycles = [
     'weekly',
     'monthly',

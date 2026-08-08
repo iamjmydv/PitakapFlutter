@@ -309,18 +309,11 @@ class AppTheme {
         elevation: 2,
         shape: const CircleBorder(),
       ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: surface,
-        selectedItemColor: primary,
-        unselectedItemColor: inkSub,
-        selectedLabelStyle: style(11, FontWeight.w600, color: primary),
-        unselectedLabelStyle: style(11, FontWeight.w400, color: inkSub),
-        type: BottomNavigationBarType.fixed,
-        elevation: 0,
-      ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: surface,
-        indicatorColor: primaryContainer,
+        indicatorColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        height: 68,
         elevation: 0,
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => states.contains(WidgetState.selected)
