@@ -1,41 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:pitakapflutter/core/providers/app_providers.dart';
 import 'package:pitakapflutter/core/providers/onboarding_providers.dart';
 import 'package:pitakapflutter/core/providers/settings_providers.dart';
-import 'package:pitakapflutter/core/resources/constants.dart';
 import 'package:pitakapflutter/core/resources/keys.dart';
 import 'package:pitakapflutter/core/resources/strings.dart';
 import 'package:pitakapflutter/core/theme/app_theme.dart';
 import 'package:pitakapflutter/feature/onboarding/presentation/onboarding_page.dart';
-import 'package:pitakapflutter/main.dart';
 
-Future<ProviderContainer> containerWith(Map<String, Object> values) async {
-  SharedPreferences.setMockInitialValues(values);
-  final prefs = await SharedPreferences.getInstance();
-  return ProviderContainer(
-    overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
-  );
-}
-
-Future<Widget> appWith(Map<String, Object> values) async {
-  SharedPreferences.setMockInitialValues(values);
-  final prefs = await SharedPreferences.getInstance();
-  return ProviderScope(
-    overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
-    child: const PitakapApp(),
-  );
-}
-
-const Map<String, Object> onboarded = {Keys.prefsOnboardingSeen: true};
-
-Future<void> pumpPastSplash(WidgetTester tester) async {
-  await tester.pump(Constants.splashMinimumDuration);
-  await tester.pumpAndSettle();
-}
+import 'helpers.dart';
 
 void main() {
   group('themeModeProvider', () {

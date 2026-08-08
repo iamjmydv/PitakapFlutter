@@ -2,6 +2,19 @@ class Strings {
   static const String appName = 'Pitakap';
   static const String appTagline = 'Your wallet, tracked';
 
+  static const String emailLabel = 'Email';
+  static const String passwordLabel = 'Password';
+  static const String passwordShow = 'Show password';
+  static const String passwordHide = 'Hide password';
+
+  static const String loginTagline = "Your wallet's memory";
+  static const String loginSignIn = 'Sign In';
+  static const String loginForgotPassword = 'Forgot password?';
+  static const String loginOr = 'or';
+  static const String loginContinueWithGoogle = 'Continue with Google';
+  static const String loginNoAccount = "Don't have an account? ";
+  static const String loginSignUpLink = 'Sign Up';
+
   static const String onboardingSkip = 'Skip';
   static const String onboardingNext = 'Next';
   static const String onboardingStart = 'Get Started';

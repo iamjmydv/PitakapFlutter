@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pitakapflutter/core/router/app_routes.dart';
 import 'package:pitakapflutter/core/router/main_shell.dart';
+import 'package:pitakapflutter/feature/auth/presentation/login/login_page.dart';
 import 'package:pitakapflutter/feature/dashboard/presentation/dashboard_page.dart';
 import 'package:pitakapflutter/feature/expense/presentation/expenses_page.dart';
 import 'package:pitakapflutter/feature/onboarding/presentation/onboarding_page.dart';
@@ -28,6 +29,10 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (context, state) => const OnboardingPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.login,
+        builder: (context, state) => const LoginPage(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
