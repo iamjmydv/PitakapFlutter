@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pitakapflutter/core/common/common.dart';
 import 'package:pitakapflutter/core/resources/strings.dart';
+import 'package:pitakapflutter/core/router/app_routes.dart';
 import 'package:pitakapflutter/core/theme/app_theme.dart';
 import 'package:pitakapflutter/core/utils/validators.dart';
 import 'package:pitakapflutter/core/widgets/app_logo.dart';
@@ -31,6 +33,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     FocusScope.of(context).unfocus();
     _formKey.currentState?.validate();
   }
+
+  void _openSignUp() => context.push(AppRoutes.signUp);
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +101,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   CommonRichLinkText(
                     text: Strings.loginNoAccount,
                     linkText: Strings.loginSignUpLink,
-                    onTap: () {},
+                    onTap: _openSignUp,
                   ),
                   const SizedBox(height: AppSpacing.lg),
                 ],

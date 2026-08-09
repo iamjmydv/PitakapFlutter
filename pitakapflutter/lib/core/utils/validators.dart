@@ -24,4 +24,15 @@ abstract final class Validators {
 
     return null;
   }
+
+  static String? confirmPassword(String? value, String password) {
+    if ((value ?? '').isEmpty) return Strings.confirmPasswordRequired;
+    if (value != password) return Strings.passwordsDoNotMatch;
+
+    return null;
+  }
+
+  static String? notEmpty(String? value, String message) {
+    return (value?.trim() ?? '').isEmpty ? message : null;
+  }
 }

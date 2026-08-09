@@ -2,6 +2,18 @@ class Strings {
   static const String appName = 'Pitakap';
   static const String appTagline = 'Your wallet, tracked';
 
+  static const String signUpTitle = 'Create account';
+  static const String signUpSubtitle = 'Start tracking every peso';
+  static const String signUpAction = 'Sign Up';
+  static const String signUpTerms =
+      'By signing up, you agree to our Terms of Service and Privacy Policy.';
+  static const String signUpHaveAccount = 'Already have an account? ';
+  static const String signUpSignInLink = 'Sign In';
+
+  static const String firstNameLabel = 'First name';
+  static const String lastNameLabel = 'Last name';
+  static const String confirmPasswordLabel = 'Confirm password';
+
   static const String emailLabel = 'Email';
   static const String passwordLabel = 'Password';
   static const String passwordShow = 'Show password';
@@ -51,7 +63,10 @@ class Strings {
   static const String passwordRequired = 'Password is required';
   static const String passwordTooShort =
       'Password must be at least 6 characters';
-  static const String nameRequired = 'Name is required';
+  static const String firstNameRequired = 'First name is required';
+  static const String lastNameRequired = 'Last name is required';
+  static const String confirmPasswordRequired = 'Please confirm your password';
+  static const String passwordsDoNotMatch = 'Passwords do not match';
   static const String amountRequired = 'Amount is required';
   static const String amountInvalid = 'Enter a valid amount';
 

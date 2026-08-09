@@ -59,4 +59,61 @@ void main() {
       expect(Validators.password('   a  '), isNull);
     });
   });
+
+  group('Validators.confirmPassword', () {
+    test('rejects an empty confirmation', () {
+      expect(
+        Validators.confirmPassword(null, 'secret123'),
+        Strings.confirmPasswordRequired,
+      );
+      expect(
+        Validators.confirmPassword('', 'secret123'),
+        Strings.confirmPasswordRequired,
+      );
+    });
+
+    test('rejects a confirmation that differs', () {
+      expect(
+        Validators.confirmPassword('secret124', 'secret123'),
+        Strings.passwordsDoNotMatch,
+      );
+    });
+
+    test('is case and whitespace sensitive', () {
+      expect(
+        Validators.confirmPassword('Secret123', 'secret123'),
+        Strings.passwordsDoNotMatch,
+      );
+      expect(
+        Validators.confirmPassword('secret123 ', 'secret123'),
+        Strings.passwordsDoNotMatch,
+      );
+    });
+
+    test('accepts an exact match', () {
+      expect(Validators.confirmPassword('secret123', 'secret123'), isNull);
+    });
+  });
+
+  group('Validators.notEmpty', () {
+    test('rejects null, empty and whitespace-only values', () {
+      expect(Validators.notEmpty(null, Strings.firstNameRequired),
+          Strings.firstNameRequired);
+      expect(Validators.notEmpty('', Strings.firstNameRequired),
+          Strings.firstNameRequired);
+      expect(Validators.notEmpty('   ', Strings.firstNameRequired),
+          Strings.firstNameRequired);
+    });
+
+    test('accepts any value with visible characters', () {
+      expect(Validators.notEmpty('Diane', Strings.firstNameRequired), isNull);
+      expect(Validators.notEmpty('  Diane  ', Strings.firstNameRequired),
+          isNull);
+    });
+
+    test('returns the message it was given', () {
+      expect(Validators.notEmpty('', Strings.lastNameRequired),
+          Strings.lastNameRequired);
+    });
+  });
 }
