@@ -2,6 +2,14 @@ class Strings {
   static const String appName = 'Pitakap';
   static const String appTagline = 'Your wallet, tracked';
 
+  static const String forgotPasswordTitle = 'Reset password';
+  static const String forgotPasswordSubtitle =
+      'Enter the email you signed up with and we will send you a link to set '
+      'a new password.';
+  static const String forgotPasswordAction = 'Send reset link';
+  static const String forgotPasswordRemembered = 'Remember your password? ';
+  static const String forgotPasswordSignInLink = 'Sign In';
+
   static const String signUpTitle = 'Create account';
   static const String signUpSubtitle = 'Start tracking every peso';
   static const String signUpAction = 'Sign Up';

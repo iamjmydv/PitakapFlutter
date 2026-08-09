@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pitakapflutter/core/router/app_routes.dart';
 import 'package:pitakapflutter/core/router/main_shell.dart';
+import 'package:pitakapflutter/feature/auth/presentation/forgot_password/forgot_password_page.dart';
 import 'package:pitakapflutter/feature/auth/presentation/login/login_page.dart';
 import 'package:pitakapflutter/feature/auth/presentation/sign_up/sign_up_page.dart';
 import 'package:pitakapflutter/feature/dashboard/presentation/dashboard_page.dart';
@@ -38,6 +39,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.signUp,
         builder: (context, state) => const SignUpPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.forgotPassword,
+        builder: (context, state) => ForgotPasswordPage(
+          initialEmail: state.uri.queryParameters[AppRoutes.emailQueryParam],
+        ),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>

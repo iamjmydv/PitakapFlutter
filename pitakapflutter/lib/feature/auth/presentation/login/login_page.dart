@@ -36,6 +36,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void _openSignUp() => context.push(AppRoutes.signUp);
 
+  void _openForgotPassword() {
+    final email = _emailController.text.trim();
+    final location = Uri(
+      path: AppRoutes.forgotPassword,
+      queryParameters: email.isEmpty
+          ? null
+          : {AppRoutes.emailQueryParam: email},
+    ).toString();
+
+    context.push(location);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -84,7 +96,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: _openForgotPassword,
                       child: const Text(Strings.loginForgotPassword),
                     ),
                   ),
