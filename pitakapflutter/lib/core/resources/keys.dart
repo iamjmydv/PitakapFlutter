@@ -4,7 +4,8 @@ class Keys {
   static const String expensesCollection = 'expenses';
 
   static const String userId = 'userId';
-  static const String name = 'name';
+  static const String firstName = 'firstName';
+  static const String lastName = 'lastName';
   static const String email = 'email';
   static const String defaultCurrency = 'defaultCurrency';
   static const String createdAt = 'createdAt';

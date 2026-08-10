@@ -75,15 +75,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   ),
                 ),
                 const SizedBox(height: AppSpacing.sm),
-                Text(
-                  Strings.signUpTitle,
-                  style: theme.textTheme.headlineLarge,
-                ),
+                Text(Strings.signUpTitle, style: theme.textTheme.headlineLarge),
                 const SizedBox(height: AppSpacing.xs),
-                Text(
-                  Strings.signUpSubtitle,
-                  style: theme.textTheme.bodyMedium,
-                ),
+                Text(Strings.signUpSubtitle, style: theme.textTheme.bodyMedium),
                 const SizedBox(height: AppSpacing.lg),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -83,8 +83,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     validator: Validators.email,
-                    onFieldSubmitted: (_) =>
-                        _passwordFocusNode.requestFocus(),
+                    onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
                   ),
                   const SizedBox(height: AppSpacing.md),
                   CommonPasswordField(
