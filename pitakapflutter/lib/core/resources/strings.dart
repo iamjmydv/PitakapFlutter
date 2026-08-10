@@ -2,6 +2,10 @@ class Strings {
   static const String appName = 'Pitakap';
   static const String appTagline = 'Your wallet, tracked';
 
+  static const String forgotPasswordSent =
+      'Reset link sent, check your inbox';
+  static const String signOutAction = 'Sign out';
+
   static const String forgotPasswordTitle = 'Reset password';
   static const String forgotPasswordSubtitle =
       'Enter the email you signed up with and we will send you a link to set '

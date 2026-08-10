@@ -8,6 +8,7 @@ import 'package:pitakapflutter/feature/auth/domain/usecases/login_user_usecase.d
 import 'package:pitakapflutter/feature/auth/domain/usecases/send_password_reset_usecase.dart';
 import 'package:pitakapflutter/feature/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:pitakapflutter/feature/auth/domain/usecases/sign_up_user_usecase.dart';
+import 'package:pitakapflutter/feature/auth/domain/usecases/watch_auth_state_usecase.dart';
 
 final firebaseAuthProvider = Provider<FirebaseAuth>(
   (ref) => FirebaseAuth.instance,
@@ -26,6 +27,14 @@ final authRemoteDatasourceProvider = Provider<AuthRemoteDatasource>(
 
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepositoryImpl(ref.watch(authRemoteDatasourceProvider)),
+);
+
+final watchAuthStateUseCaseProvider = Provider<WatchAuthStateUseCase>(
+  (ref) => WatchAuthStateUseCase(ref.watch(authRepositoryProvider)),
+);
+
+final authStateProvider = StreamProvider<String?>(
+  (ref) => ref.watch(watchAuthStateUseCaseProvider).call(),
 );
 
 final loginUserUseCaseProvider = Provider<LoginUserUseCase>(

@@ -7,6 +7,9 @@ import 'package:pitakapflutter/core/router/app_routes.dart';
 import 'package:pitakapflutter/core/theme/app_theme.dart';
 import 'package:pitakapflutter/core/utils/validators.dart';
 import 'package:pitakapflutter/core/widgets/app_logo.dart';
+import 'package:pitakapflutter/feature/auth/domain/usecases/login_user_usecase.dart';
+import 'package:pitakapflutter/feature/auth/presentation/login/providers/login_controller.dart';
+import 'package:pitakapflutter/feature/auth/presentation/login/providers/login_state.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -31,7 +34,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void _onSignIn() {
     FocusScope.of(context).unfocus();
-    _formKey.currentState?.validate();
+
+    if (_formKey.currentState?.validate() != true) return;
+
+    ref.read(loginControllerProvider.notifier).submit(
+          LoginUseCaseParams(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          ),
+        );
   }
 
   void _openSignUp() => context.push(AppRoutes.signUp);
@@ -51,6 +62,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loginState = ref.watch(loginControllerProvider).value;
+
+    ref.listen(loginControllerProvider, (previous, next) {
+      final state = next.value;
+      if (state is LoginFailedState) {
+        CommonSnackBar.showError(context, state.message);
+        ref.read(loginControllerProvider.notifier).reset();
+      }
+    });
 
     return Scaffold(
       body: SafeArea(
@@ -103,6 +123,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   CommonPrimaryButton(
                     label: Strings.loginSignIn,
                     onPressed: _onSignIn,
+                    isLoading: loginState is LoginLoadingState,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   const _OrDivider(),

@@ -6,6 +6,9 @@ import 'package:pitakapflutter/core/resources/strings.dart';
 import 'package:pitakapflutter/core/router/app_routes.dart';
 import 'package:pitakapflutter/core/theme/app_theme.dart';
 import 'package:pitakapflutter/core/utils/validators.dart';
+import 'package:pitakapflutter/feature/auth/domain/usecases/sign_up_user_usecase.dart';
+import 'package:pitakapflutter/feature/auth/presentation/sign_up/providers/sign_up_controller.dart';
+import 'package:pitakapflutter/feature/auth/presentation/sign_up/providers/sign_up_state.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
@@ -42,7 +45,17 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   void _onSignUp() {
     FocusScope.of(context).unfocus();
-    _formKey.currentState?.validate();
+
+    if (_formKey.currentState?.validate() != true) return;
+
+    ref.read(signUpControllerProvider.notifier).submit(
+          SignUpUseCaseParams(
+            firstName: _firstNameController.text.trim(),
+            lastName: _lastNameController.text.trim(),
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          ),
+        );
   }
 
   void _openLogin() {
@@ -57,6 +70,15 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final signUpState = ref.watch(signUpControllerProvider).value;
+
+    ref.listen(signUpControllerProvider, (previous, next) {
+      final state = next.value;
+      if (state is SignUpFailedState) {
+        CommonSnackBar.showError(context, state.message);
+        ref.read(signUpControllerProvider.notifier).reset();
+      }
+    });
 
     return Scaffold(
       body: SafeArea(
@@ -146,6 +168,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 CommonPrimaryButton(
                   label: Strings.signUpAction,
                   onPressed: _onSignUp,
+                  isLoading: signUpState is SignUpLoadingState,
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Text(

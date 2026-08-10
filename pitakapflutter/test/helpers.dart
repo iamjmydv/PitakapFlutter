@@ -1,16 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:pitakapflutter/core/providers/app_providers.dart';
+import 'package:pitakapflutter/core/providers/auth_providers.dart';
 import 'package:pitakapflutter/core/resources/constants.dart';
 import 'package:pitakapflutter/core/resources/keys.dart';
 import 'package:pitakapflutter/core/router/app_router.dart';
 import 'package:pitakapflutter/core/theme/app_theme.dart';
+import 'package:pitakapflutter/feature/auth/domain/entities/user_details_entity.dart';
+import 'package:pitakapflutter/feature/auth/domain/repository/auth_repository.dart';
+import 'package:pitakapflutter/feature/auth/domain/usecases/login_user_usecase.dart';
+import 'package:pitakapflutter/feature/auth/domain/usecases/send_password_reset_usecase.dart';
+import 'package:pitakapflutter/feature/auth/domain/usecases/sign_up_user_usecase.dart';
 import 'package:pitakapflutter/main.dart';
 
+class MockAuthRepository extends Mock implements AuthRepository {}
+
 const Map<String, Object> onboarded = {Keys.prefsOnboardingSeen: true};
+
+const testUser = UserDetailsEntity(
+  uid: 'uid-1',
+  firstName: 'Diane',
+  lastName: 'Magno',
+  email: 'diane@pitakap.app',
+);
+
+void registerAuthFallbacks() {
+  registerFallbackValue(const LoginUseCaseParams(email: '', password: ''));
+  registerFallbackValue(
+    const SignUpUseCaseParams(
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+    ),
+  );
+  registerFallbackValue(const SendPasswordResetUseCaseParams(email: ''));
+}
+
+List<Override> authOverrides({
+  String? signedInUid,
+  AuthRepository? repository,
+}) {
+  return [
+    authStateProvider.overrideWith((ref) => Stream.value(signedInUid)),
+    if (repository != null) authRepositoryProvider.overrideWithValue(repository),
+  ];
+}
 
 Future<ProviderContainer> containerWith(Map<String, Object> values) async {
   SharedPreferences.setMockInitialValues(values);
@@ -20,11 +60,30 @@ Future<ProviderContainer> containerWith(Map<String, Object> values) async {
   );
 }
 
-Future<Widget> appWith(Map<String, Object> values) async {
+Future<ProviderContainer> containerWithAuth(
+  AuthRepository repository,
+) async {
+  SharedPreferences.setMockInitialValues({});
+  final prefs = await SharedPreferences.getInstance();
+  return ProviderContainer(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
+      authRepositoryProvider.overrideWithValue(repository),
+    ],
+  );
+}
+
+Future<Widget> appWith(
+  Map<String, Object> values, {
+  String? signedInUid,
+}) async {
   SharedPreferences.setMockInitialValues(values);
   final prefs = await SharedPreferences.getInstance();
   return ProviderScope(
-    overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
+      ...authOverrides(signedInUid: signedInUid),
+    ],
     child: const PitakapApp(),
   );
 }
@@ -33,13 +92,17 @@ Future<void> pumpPage(
   WidgetTester tester,
   Widget page, {
   Brightness brightness = Brightness.light,
+  List<Override> overrides = const [],
 }) async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
 
   await tester.pumpWidget(
     ProviderScope(
-      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+        ...overrides,
+      ],
       child: MaterialApp(
         theme: brightness == Brightness.dark
             ? AppTheme.dark()
@@ -60,14 +123,20 @@ Future<ProviderContainer> pumpAppAt(
   WidgetTester tester,
   String location, {
   Map<String, Object> values = onboarded,
+  String? signedInUid,
+  AuthRepository? repository,
 }) async {
   SharedPreferences.setMockInitialValues(values);
   final prefs = await SharedPreferences.getInstance();
   final container = ProviderContainer(
-    overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
+      ...authOverrides(signedInUid: signedInUid, repository: repository),
+    ],
   );
   addTearDown(container.dispose);
 
+  await tester.pumpWidget(const SizedBox.shrink());
   await tester.pumpWidget(
     UncontrolledProviderScope(
       container: container,

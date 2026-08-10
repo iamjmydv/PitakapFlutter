@@ -8,6 +8,7 @@ import 'package:pitakapflutter/core/providers/settings_providers.dart';
 import 'package:pitakapflutter/core/resources/keys.dart';
 import 'package:pitakapflutter/core/resources/strings.dart';
 import 'package:pitakapflutter/core/theme/app_theme.dart';
+import 'package:pitakapflutter/feature/auth/presentation/login/login_page.dart';
 import 'package:pitakapflutter/feature/onboarding/presentation/onboarding_page.dart';
 
 import 'helpers.dart';
@@ -106,8 +107,20 @@ void main() {
       await pumpPastSplash(tester);
     });
 
-    testWidgets('splash routes into the dashboard shell', (tester) async {
+    testWidgets('splash routes a signed out user to login', (tester) async {
       await tester.pumpWidget(await appWith(onboarded));
+      await pumpPastSplash(tester);
+
+      expect(find.byType(LoginPage), findsOneWidget);
+      expect(find.byType(NavigationBar), findsNothing);
+    });
+
+    testWidgets('splash routes a signed in user into the shell', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        await appWith(onboarded, signedInUid: 'uid-1'),
+      );
       await pumpPastSplash(tester);
 
       expect(find.byType(NavigationBar), findsOneWidget);
@@ -116,7 +129,9 @@ void main() {
     });
 
     testWidgets('bottom navigation reaches every tab', (tester) async {
-      await tester.pumpWidget(await appWith(onboarded));
+      await tester.pumpWidget(
+        await appWith(onboarded, signedInUid: 'uid-1'),
+      );
       await pumpPastSplash(tester);
 
       final tabs = <IconData, String>{
@@ -136,7 +151,9 @@ void main() {
     });
 
     testWidgets('a visited tab stays alive off screen', (tester) async {
-      await tester.pumpWidget(await appWith(onboarded));
+      await tester.pumpWidget(
+        await appWith(onboarded, signedInUid: 'uid-1'),
+      );
       await pumpPastSplash(tester);
 
       expect(
@@ -161,7 +178,10 @@ void main() {
 
     testWidgets('app renders in dark mode when persisted', (tester) async {
       await tester.pumpWidget(
-        await appWith({...onboarded, Keys.prefsThemeMode: 'dark'}),
+        await appWith(
+          {...onboarded, Keys.prefsThemeMode: 'dark'},
+          signedInUid: 'uid-1',
+        ),
       );
       await pumpPastSplash(tester);
 
@@ -242,8 +262,8 @@ void main() {
       await tester.tap(find.text(Strings.onboardingStart));
       await tester.pumpAndSettle();
 
-      expect(find.byType(NavigationBar), findsOneWidget);
-      expect(find.text(Strings.dashboardTitle), findsWidgets);
+      expect(find.byType(LoginPage), findsOneWidget);
+      expect(find.byType(NavigationBar), findsNothing);
 
       final prefs = await SharedPreferences.getInstance();
       expect(prefs.getBool(Keys.prefsOnboardingSeen), isTrue);
@@ -258,7 +278,7 @@ void main() {
       await tester.tap(find.text(Strings.onboardingSkip));
       await tester.pumpAndSettle();
 
-      expect(find.byType(NavigationBar), findsOneWidget);
+      expect(find.byType(LoginPage), findsOneWidget);
 
       final prefs = await SharedPreferences.getInstance();
       expect(prefs.getBool(Keys.prefsOnboardingSeen), isTrue);

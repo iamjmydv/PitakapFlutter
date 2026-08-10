@@ -9,6 +9,8 @@ import 'package:pitakapflutter/feature/auth/domain/usecases/send_password_reset_
 import 'package:pitakapflutter/feature/auth/domain/usecases/sign_up_user_usecase.dart';
 
 abstract interface class AuthRemoteDatasource {
+  Stream<String?> authStateChanges();
+
   Future<UserDetailsModel> signUp(SignUpUseCaseParams params);
 
   Future<UserDetailsModel> login(LoginUseCaseParams params);
@@ -26,6 +28,11 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
 
   DocumentReference<Map<String, dynamic>> _userDoc(String uid) {
     return firestore.collection(Keys.userDetailsCollection).doc(uid);
+  }
+
+  @override
+  Stream<String?> authStateChanges() {
+    return auth.authStateChanges().map((user) => user?.uid);
   }
 
   @override

@@ -11,6 +11,9 @@ class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl(this.remote);
 
   @override
+  Stream<String?> authStateChanges() => remote.authStateChanges();
+
+  @override
   Future<UserDetailsEntity> signUp(SignUpUseCaseParams params) {
     return remote.signUp(params);
   }

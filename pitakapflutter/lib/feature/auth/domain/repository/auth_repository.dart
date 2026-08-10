@@ -4,6 +4,8 @@ import 'package:pitakapflutter/feature/auth/domain/usecases/send_password_reset_
 import 'package:pitakapflutter/feature/auth/domain/usecases/sign_up_user_usecase.dart';
 
 abstract interface class AuthRepository {
+  Stream<String?> authStateChanges();
+
   Future<UserDetailsEntity> signUp(SignUpUseCaseParams params);
 
   Future<UserDetailsEntity> login(LoginUseCaseParams params);

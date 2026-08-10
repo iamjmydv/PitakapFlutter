@@ -1,3 +1,9 @@
+import 'package:pitakapflutter/core/resources/strings.dart';
+
+String failureMessage(Object error) {
+  return error is Failure ? error.message : Strings.genericError;
+}
+
 sealed class Failure implements Exception {
   final String message;
   const Failure(this.message);

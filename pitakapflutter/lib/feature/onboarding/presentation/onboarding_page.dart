@@ -70,7 +70,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   Future<void> _finish() async {
     await ref.read(onboardingSeenProvider.notifier).markSeen();
     if (!mounted) return;
-    context.go(AppRoutes.dashboard);
+    context.go(AppRoutes.login);
   }
 
   @override

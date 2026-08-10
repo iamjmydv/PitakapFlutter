@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pitakapflutter/core/providers/auth_providers.dart';
 import 'package:pitakapflutter/core/router/app_routes.dart';
 import 'package:pitakapflutter/core/router/main_shell.dart';
 import 'package:pitakapflutter/feature/auth/presentation/forgot_password/forgot_password_page.dart';
@@ -20,9 +21,36 @@ StatefulShellBranch _branch(String path, Widget page) {
   );
 }
 
+const Set<String> _publicRoutes = {
+  AppRoutes.onboarding,
+  AppRoutes.login,
+  AppRoutes.signUp,
+  AppRoutes.forgotPassword,
+};
+
 final goRouterProvider = Provider<GoRouter>((ref) {
+  final refresh = ValueNotifier<AsyncValue<String?>>(const AsyncLoading());
+  ref.listen(authStateProvider, (_, next) => refresh.value = next);
+  ref.onDispose(refresh.dispose);
+
   final router = GoRouter(
     initialLocation: AppRoutes.splash,
+    refreshListenable: refresh,
+    redirect: (context, state) {
+      final location = state.matchedLocation;
+      if (location == AppRoutes.splash) return null;
+
+      final authState = ref.read(authStateProvider);
+      if (authState.isLoading) return null;
+
+      final isSignedIn = authState.value != null;
+      final isPublic = _publicRoutes.contains(location);
+
+      if (!isSignedIn) return isPublic ? null : AppRoutes.login;
+      if (isPublic) return AppRoutes.dashboard;
+
+      return null;
+    },
     routes: [
       GoRoute(
         path: AppRoutes.splash,
