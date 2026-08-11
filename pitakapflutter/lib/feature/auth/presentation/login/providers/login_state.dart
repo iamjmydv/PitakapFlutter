@@ -12,6 +12,10 @@ class LoginLoadingState extends LoginState {
   const LoginLoadingState();
 }
 
+class LoginGoogleLoadingState extends LoginState {
+  const LoginGoogleLoadingState();
+}
+
 class LoginSuccessState extends LoginState {
   final UserDetailsEntity user;
 

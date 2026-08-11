@@ -45,6 +45,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         );
   }
 
+  void _onGoogleSignIn() {
+    FocusScope.of(context).unfocus();
+    ref.read(loginControllerProvider.notifier).submitGoogle();
+  }
+
   void _openSignUp() => context.push(AppRoutes.signUp);
 
   void _openForgotPassword() {
@@ -128,7 +133,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   const SizedBox(height: AppSpacing.md),
                   const _OrDivider(),
                   const SizedBox(height: AppSpacing.md),
-                  const _GoogleButton(),
+                  _GoogleButton(
+                    onPressed: _onGoogleSignIn,
+                    isLoading: loginState is LoginGoogleLoadingState,
+                  ),
                   const SizedBox(height: AppSpacing.xl),
                   CommonRichLinkText(
                     text: Strings.loginNoAccount,
@@ -167,7 +175,10 @@ class _OrDivider extends StatelessWidget {
 }
 
 class _GoogleButton extends StatelessWidget {
-  const _GoogleButton();
+  final VoidCallback onPressed;
+  final bool isLoading;
+
+  const _GoogleButton({required this.onPressed, required this.isLoading});
 
   static const Color _googleBlue = Color(0xFF4285F4);
 
@@ -176,21 +187,23 @@ class _GoogleButton extends StatelessWidget {
     final theme = Theme.of(context);
 
     return OutlinedButton(
-      onPressed: () {},
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'G',
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: _googleBlue,
-              fontWeight: FontWeight.w700,
+      onPressed: isLoading ? null : onPressed,
+      child: isLoading
+          ? const CommonLoader(size: 20)
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'G',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: _googleBlue,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                const Text(Strings.loginContinueWithGoogle),
+              ],
             ),
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          const Text(Strings.loginContinueWithGoogle),
-        ],
-      ),
     );
   }
 }

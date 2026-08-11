@@ -10,6 +10,8 @@ abstract interface class AuthRepository {
 
   Future<UserDetailsEntity> login(LoginUseCaseParams params);
 
+  Future<UserDetailsEntity?> signInWithGoogle();
+
   Future<void> sendPasswordReset(SendPasswordResetUseCaseParams params);
 
   Future<void> signOut();

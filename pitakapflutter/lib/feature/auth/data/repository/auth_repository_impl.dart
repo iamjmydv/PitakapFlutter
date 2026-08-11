@@ -24,6 +24,9 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<UserDetailsEntity?> signInWithGoogle() => remote.signInWithGoogle();
+
+  @override
   Future<void> sendPasswordReset(SendPasswordResetUseCaseParams params) {
     return remote.sendPasswordReset(params);
   }

@@ -26,6 +26,24 @@ class LoginController extends AsyncNotifier<LoginState> {
     );
   }
 
+  Future<void> submitGoogle() async {
+    state = const AsyncValue.data(LoginGoogleLoadingState());
+
+    final result = await AsyncValue.guard(
+      () => ref.read(signInWithGoogleUseCaseProvider).call(),
+    );
+
+    state = AsyncValue.data(
+      switch (result) {
+        AsyncData(:final value) when value == null =>
+          const LoginInitialState(),
+        AsyncData(:final value) => LoginSuccessState(value!),
+        AsyncError(:final error) => LoginFailedState(failureMessage(error)),
+        _ => const LoginGoogleLoadingState(),
+      },
+    );
+  }
+
   void reset() => state = const AsyncValue.data(LoginInitialState());
 }
 
