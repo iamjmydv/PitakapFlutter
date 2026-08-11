@@ -11,7 +11,11 @@ class ForgotPasswordController extends AsyncNotifier<ForgotPasswordState> {
   FutureOr<ForgotPasswordState> build() =>
       const ForgotPasswordInitialState();
 
+  bool get isBusy => state.value is ForgotPasswordLoadingState;
+
   Future<void> submit(SendPasswordResetUseCaseParams params) async {
+    if (isBusy) return;
+
     state = const AsyncValue.data(ForgotPasswordLoadingState());
 
     final result = await AsyncValue.guard(

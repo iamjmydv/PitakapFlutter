@@ -68,6 +68,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final loginState = ref.watch(loginControllerProvider).value;
+    final isBusy = loginState is LoginLoadingState ||
+        loginState is LoginGoogleLoadingState;
 
     ref.listen(loginControllerProvider, (previous, next) {
       final state = next.value;
@@ -107,6 +109,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     label: Strings.emailLabel,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
+                    enabled: !isBusy,
                     validator: Validators.email,
                     onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
                   ),
@@ -114,13 +117,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   CommonPasswordField(
                     controller: _passwordController,
                     focusNode: _passwordFocusNode,
+                    enabled: !isBusy,
                     validator: Validators.password,
                     onFieldSubmitted: (_) => _onSignIn(),
                   ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: _openForgotPassword,
+                      onPressed: isBusy ? null : _openForgotPassword,
                       child: const Text(Strings.loginForgotPassword),
                     ),
                   ),
@@ -134,7 +138,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   const _OrDivider(),
                   const SizedBox(height: AppSpacing.md),
                   _GoogleButton(
-                    onPressed: _onGoogleSignIn,
+                    onPressed: isBusy ? null : _onGoogleSignIn,
                     isLoading: loginState is LoginGoogleLoadingState,
                   ),
                   const SizedBox(height: AppSpacing.xl),
@@ -175,7 +179,7 @@ class _OrDivider extends StatelessWidget {
 }
 
 class _GoogleButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isLoading;
 
   const _GoogleButton({required this.onPressed, required this.isLoading});

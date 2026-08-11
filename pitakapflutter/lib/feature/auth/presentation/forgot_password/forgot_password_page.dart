@@ -60,6 +60,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final resetState = ref.watch(forgotPasswordControllerProvider).value;
+    final isBusy = resetState is ForgotPasswordLoadingState;
 
     ref.listen(forgotPasswordControllerProvider, (previous, next) {
       final state = next.value;
@@ -110,6 +111,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
                   autofocus: true,
+                  enabled: !isBusy,
                   validator: Validators.email,
                   onFieldSubmitted: (_) => _onSendResetLink(),
                 ),

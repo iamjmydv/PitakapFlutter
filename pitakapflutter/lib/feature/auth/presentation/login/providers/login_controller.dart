@@ -10,7 +10,14 @@ class LoginController extends AsyncNotifier<LoginState> {
   @override
   FutureOr<LoginState> build() => const LoginInitialState();
 
+  bool get isBusy {
+    final current = state.value;
+    return current is LoginLoadingState || current is LoginGoogleLoadingState;
+  }
+
   Future<void> submit(LoginUseCaseParams params) async {
+    if (isBusy) return;
+
     state = const AsyncValue.data(LoginLoadingState());
 
     final result = await AsyncValue.guard(
@@ -27,6 +34,8 @@ class LoginController extends AsyncNotifier<LoginState> {
   }
 
   Future<void> submitGoogle() async {
+    if (isBusy) return;
+
     state = const AsyncValue.data(LoginGoogleLoadingState());
 
     final result = await AsyncValue.guard(

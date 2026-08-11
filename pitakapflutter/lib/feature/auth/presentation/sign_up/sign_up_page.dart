@@ -71,6 +71,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final signUpState = ref.watch(signUpControllerProvider).value;
+    final isBusy = signUpState is SignUpLoadingState;
 
     ref.listen(signUpControllerProvider, (previous, next) {
       final state = next.value;
@@ -109,6 +110,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         controller: _firstNameController,
                         label: Strings.firstNameLabel,
                         textCapitalization: TextCapitalization.words,
+                        enabled: !isBusy,
                         textInputAction: TextInputAction.next,
                         validator: (value) => Validators.notEmpty(
                           value,
@@ -125,6 +127,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         focusNode: _lastNameFocusNode,
                         label: Strings.lastNameLabel,
                         textCapitalization: TextCapitalization.words,
+                        enabled: !isBusy,
                         textInputAction: TextInputAction.next,
                         validator: (value) => Validators.notEmpty(
                           value,
@@ -142,6 +145,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   label: Strings.emailLabel,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
+                  enabled: !isBusy,
                   validator: Validators.email,
                   onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
                 ),
@@ -150,6 +154,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   controller: _passwordController,
                   focusNode: _passwordFocusNode,
                   textInputAction: TextInputAction.next,
+                  enabled: !isBusy,
                   validator: Validators.password,
                   onFieldSubmitted: (_) => _confirmFocusNode.requestFocus(),
                 ),
@@ -158,6 +163,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                   controller: _confirmController,
                   focusNode: _confirmFocusNode,
                   label: Strings.confirmPasswordLabel,
+                  enabled: !isBusy,
                   validator: (value) => Validators.confirmPassword(
                     value,
                     _passwordController.text,

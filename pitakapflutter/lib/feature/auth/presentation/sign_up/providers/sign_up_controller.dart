@@ -10,7 +10,11 @@ class SignUpController extends AsyncNotifier<SignUpState> {
   @override
   FutureOr<SignUpState> build() => const SignUpInitialState();
 
+  bool get isBusy => state.value is SignUpLoadingState;
+
   Future<void> submit(SignUpUseCaseParams params) async {
+    if (isBusy) return;
+
     state = const AsyncValue.data(SignUpLoadingState());
 
     final result = await AsyncValue.guard(
