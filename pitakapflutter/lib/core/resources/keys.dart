@@ -11,6 +11,7 @@ class Keys {
   static const String createdAt = 'createdAt';
   static const String updatedAt = 'updatedAt';
 
+  static const String name = 'name';
   static const String category = 'category';
   static const String amount = 'amount';
   static const String currency = 'currency';
