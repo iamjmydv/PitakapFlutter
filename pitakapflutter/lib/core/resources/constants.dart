@@ -7,13 +7,6 @@ class Constants {
 
   static const Duration splashMinimumDuration = Duration(milliseconds: 1200);
 
-  static const List<String> billingCycles = [
-    'weekly',
-    'monthly',
-    'quarterly',
-    'yearly',
-  ];
-
   static const List<String> subscriptionCategories = [
     'entertainment',
     'utilities',
