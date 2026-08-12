@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:pitakapflutter/core/providers/app_providers.dart';
 import 'package:pitakapflutter/core/providers/auth_providers.dart';
+import 'package:pitakapflutter/core/providers/subscription_providers.dart';
 import 'package:pitakapflutter/core/resources/constants.dart';
 import 'package:pitakapflutter/core/resources/keys.dart';
 import 'package:pitakapflutter/core/router/app_router.dart';
@@ -16,6 +17,11 @@ import 'package:pitakapflutter/feature/auth/domain/repository/auth_repository.da
 import 'package:pitakapflutter/feature/auth/domain/usecases/login_user_usecase.dart';
 import 'package:pitakapflutter/feature/auth/domain/usecases/send_password_reset_usecase.dart';
 import 'package:pitakapflutter/feature/auth/domain/usecases/sign_up_user_usecase.dart';
+import 'package:pitakapflutter/feature/subscription/domain/entities/subscription_entity.dart';
+import 'package:pitakapflutter/feature/subscription/domain/repository/subscription_repository.dart';
+import 'package:pitakapflutter/feature/subscription/domain/usecases/create_subscription_usecase.dart';
+import 'package:pitakapflutter/feature/subscription/domain/usecases/delete_subscription_usecase.dart';
+import 'package:pitakapflutter/feature/subscription/domain/usecases/update_subscription_usecase.dart';
 import 'package:pitakapflutter/main.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -49,6 +55,32 @@ List<Override> authOverrides({
   return [
     authStateProvider.overrideWith((ref) => Stream.value(signedInUid)),
     if (repository != null) authRepositoryProvider.overrideWithValue(repository),
+  ];
+}
+
+class EmptySubscriptionRepository implements SubscriptionRepository {
+  const EmptySubscriptionRepository();
+
+  @override
+  Stream<List<SubscriptionEntity>> watchSubscriptions(String userId) {
+    return Stream.value(const []);
+  }
+
+  @override
+  Future<void> createSubscription(CreateSubscriptionUseCaseParams params) async {}
+
+  @override
+  Future<void> updateSubscription(UpdateSubscriptionUseCaseParams params) async {}
+
+  @override
+  Future<void> deleteSubscription(DeleteSubscriptionUseCaseParams params) async {}
+}
+
+List<Override> featureOverrides({SubscriptionRepository? subscriptions}) {
+  return [
+    subscriptionRepositoryProvider.overrideWithValue(
+      subscriptions ?? const EmptySubscriptionRepository(),
+    ),
   ];
 }
 
@@ -125,6 +157,8 @@ Future<ProviderContainer> pumpAppAt(
   Map<String, Object> values = onboarded,
   String? signedInUid,
   AuthRepository? repository,
+  SubscriptionRepository? subscriptionRepository,
+  List<Override> extraOverrides = const [],
 }) async {
   SharedPreferences.setMockInitialValues(values);
   final prefs = await SharedPreferences.getInstance();
@@ -132,6 +166,8 @@ Future<ProviderContainer> pumpAppAt(
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
       ...authOverrides(signedInUid: signedInUid, repository: repository),
+      ...featureOverrides(subscriptions: subscriptionRepository),
+      ...extraOverrides,
     ],
   );
   addTearDown(container.dispose);

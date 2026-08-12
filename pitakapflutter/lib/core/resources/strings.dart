@@ -66,6 +66,18 @@ class Strings {
 
   static const String dashboardTitle = 'Dashboard';
   static const String subscriptionsTitle = 'Subscriptions';
+  static const String subscriptionsEmptyTitle = 'No subscriptions yet';
+  static const String subscriptionsEmptyMessage =
+      'Add your first subscription to see what you are committed to '
+      'every month.';
+  static const String subscriptionsAddAction = 'Add subscription';
+  static const String subscriptionsLoadFailed =
+      'Could not load your subscriptions';
+  static const String subscriptionDeleted = 'Subscription deleted';
+  static const String undoAction = 'Undo';
+  static const String dueToday = 'Today';
+  static const String dueTomorrow = 'Tomorrow';
+  static const String perMonthSuffix = '/mo';
   static const String expensesTitle = 'Expenses';
   static const String statsTitle = 'Statistics';
   static const String settingsTitle = 'Settings';
