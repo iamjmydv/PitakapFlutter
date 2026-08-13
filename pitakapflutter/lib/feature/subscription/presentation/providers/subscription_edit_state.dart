@@ -16,6 +16,10 @@ class SubscriptionEditSuccessState extends SubscriptionEditState {
   const SubscriptionEditSuccessState({required this.wasExisting});
 }
 
+class SubscriptionEditDeletedState extends SubscriptionEditState {
+  const SubscriptionEditDeletedState();
+}
+
 class SubscriptionEditFailedState extends SubscriptionEditState {
   final String message;
 

@@ -82,6 +82,24 @@ class Strings {
   static const String reminderSameDay = 'On the day';
   static const String reminderOneDay = '1 day before';
 
+  static const String subscriptionDetailTitle = 'Details';
+  static const String perMonthLabel = 'per month';
+  static const String perYearLabel = 'per year';
+  static const String nextPaymentLabel = 'Next payment';
+  static const String reminderRowLabel = 'Reminder';
+  static const String firstBilledLabel = 'First billed';
+  static const String upcomingRenewalsLabel = 'Upcoming renewals';
+  static const String editAction = 'Edit';
+  static const String deleteAction = 'Delete';
+  static const String cancelAction = 'Cancel';
+  static const String deleteSubscriptionTitle = 'Delete subscription?';
+  static const String deleteSubscriptionMessage =
+      'This removes it from your list and stops its reminders. '
+      'This cannot be undone.';
+  static const String subscriptionNotFound = 'This subscription is gone';
+  static const String subscriptionNotFoundMessage =
+      'It may have been deleted on another device.';
+
   static const String subscriptionsTitle = 'Subscriptions';
   static const String subscriptionsEmptyTitle = 'No subscriptions yet';
   static const String subscriptionsEmptyMessage =
