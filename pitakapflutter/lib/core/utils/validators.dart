@@ -1,9 +1,7 @@
 import 'package:pitakapflutter/core/resources/strings.dart';
 
 abstract final class Validators {
-  static final RegExp _emailPattern = RegExp(
-    r'^[\w.+-]+@[\w-]+(\.[\w-]+)+$',
-  );
+  static final RegExp _emailPattern = RegExp(r'^[\w.+-]+@[\w-]+(\.[\w-]+)+$');
 
   static const int minPasswordLength = 6;
 
@@ -34,5 +32,16 @@ abstract final class Validators {
 
   static String? notEmpty(String? value, String message) {
     return (value?.trim() ?? '').isEmpty ? message : null;
+  }
+
+  static String? amount(String? value) {
+    final raw = value?.trim() ?? '';
+
+    if (raw.isEmpty) return Strings.amountRequired;
+
+    final parsed = double.tryParse(raw);
+    if (parsed == null || parsed <= 0) return Strings.amountInvalid;
+
+    return null;
   }
 }

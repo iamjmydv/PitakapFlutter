@@ -5,6 +5,8 @@ abstract final class AppRoutes {
   static const String signUp = '/sign-up';
   static const String forgotPassword = '/forgot-password';
 
+  static const String subscriptionNew = '/subscription/new';
+
   static const String emailQueryParam = 'email';
   static const String dashboard = '/dashboard';
   static const String subscriptions = '/subscriptions';

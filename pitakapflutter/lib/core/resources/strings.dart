@@ -2,8 +2,7 @@ class Strings {
   static const String appName = 'Pitakap';
   static const String appTagline = 'Your wallet, tracked';
 
-  static const String forgotPasswordSent =
-      'Reset link sent, check your inbox';
+  static const String forgotPasswordSent = 'Reset link sent, check your inbox';
   static const String signOutAction = 'Sign out';
 
   static const String forgotPasswordTitle = 'Reset password';
@@ -65,6 +64,24 @@ class Strings {
   static const String navSettings = 'Settings';
 
   static const String dashboardTitle = 'Dashboard';
+  static const String subscriptionAddTitle = 'Add subscription';
+  static const String subscriptionEditTitle = 'Edit subscription';
+  static const String subscriptionSaveAction = 'Save subscription';
+  static const String subscriptionNameLabel = 'Name';
+  static const String subscriptionNameHint = 'e.g. Netflix';
+  static const String subscriptionAmountLabel = 'Amount';
+  static const String subscriptionCategoryLabel = 'Category';
+  static const String subscriptionCycleLabel = 'Billing cycle';
+  static const String subscriptionFirstBillLabel = 'First bill date';
+  static const String subscriptionReminderLabel = 'Remind me';
+  static const String subscriptionNotesLabel = 'Notes';
+  static const String subscriptionNotesHint = 'Optional';
+  static const String subscriptionNameRequired = 'Name is required';
+  static const String subscriptionCreated = 'Subscription added';
+  static const String subscriptionUpdated = 'Subscription updated';
+  static const String reminderSameDay = 'On the day';
+  static const String reminderOneDay = '1 day before';
+
   static const String subscriptionsTitle = 'Subscriptions';
   static const String subscriptionsEmptyTitle = 'No subscriptions yet';
   static const String subscriptionsEmptyMessage =
