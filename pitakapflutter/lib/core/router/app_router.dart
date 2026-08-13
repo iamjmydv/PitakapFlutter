@@ -13,6 +13,8 @@ import 'package:pitakapflutter/feature/onboarding/presentation/onboarding_page.d
 import 'package:pitakapflutter/feature/profile/presentation/settings_page.dart';
 import 'package:pitakapflutter/feature/splash/presentation/splash_page.dart';
 import 'package:pitakapflutter/feature/stats/presentation/stats_page.dart';
+import 'package:pitakapflutter/feature/subscription/domain/entities/subscription_entity.dart';
+import 'package:pitakapflutter/feature/subscription/presentation/subscription_edit_page.dart';
 import 'package:pitakapflutter/feature/subscription/presentation/subscriptions_list_page.dart';
 
 StatefulShellBranch _branch(String path, Widget page) {
@@ -72,6 +74,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.forgotPassword,
         builder: (context, state) => ForgotPasswordPage(
           initialEmail: state.uri.queryParameters[AppRoutes.emailQueryParam],
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.subscriptionNew,
+        builder: (context, state) => SubscriptionEditPage(
+          subscription: state.extra as SubscriptionEntity?,
         ),
       ),
       StatefulShellRoute.indexedStack(

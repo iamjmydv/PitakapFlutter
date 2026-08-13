@@ -54,7 +54,8 @@ List<Override> authOverrides({
 }) {
   return [
     authStateProvider.overrideWith((ref) => Stream.value(signedInUid)),
-    if (repository != null) authRepositoryProvider.overrideWithValue(repository),
+    if (repository != null)
+      authRepositoryProvider.overrideWithValue(repository),
   ];
 }
 
@@ -67,13 +68,19 @@ class EmptySubscriptionRepository implements SubscriptionRepository {
   }
 
   @override
-  Future<void> createSubscription(CreateSubscriptionUseCaseParams params) async {}
+  Future<void> createSubscription(
+    CreateSubscriptionUseCaseParams params,
+  ) async {}
 
   @override
-  Future<void> updateSubscription(UpdateSubscriptionUseCaseParams params) async {}
+  Future<void> updateSubscription(
+    UpdateSubscriptionUseCaseParams params,
+  ) async {}
 
   @override
-  Future<void> deleteSubscription(DeleteSubscriptionUseCaseParams params) async {}
+  Future<void> deleteSubscription(
+    DeleteSubscriptionUseCaseParams params,
+  ) async {}
 }
 
 List<Override> featureOverrides({SubscriptionRepository? subscriptions}) {
@@ -92,9 +99,7 @@ Future<ProviderContainer> containerWith(Map<String, Object> values) async {
   );
 }
 
-Future<ProviderContainer> containerWithAuth(
-  AuthRepository repository,
-) async {
+Future<ProviderContainer> containerWithAuth(AuthRepository repository) async {
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
   return ProviderContainer(
@@ -174,14 +179,24 @@ Future<ProviderContainer> pumpAppAt(
 
   await tester.pumpWidget(const SizedBox.shrink());
   await tester.pumpWidget(
-    UncontrolledProviderScope(
-      container: container,
-      child: const PitakapApp(),
-    ),
+    UncontrolledProviderScope(container: container, child: const PitakapApp()),
   );
 
   container.read(goRouterProvider).go(location);
   await tester.pumpAndSettle();
 
   return container;
+}
+
+Future<ProviderContainer> containerWithSubscriptions(
+  SubscriptionRepository repository,
+) async {
+  SharedPreferences.setMockInitialValues({});
+  final prefs = await SharedPreferences.getInstance();
+  return ProviderContainer(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(prefs),
+      ...featureOverrides(subscriptions: repository),
+    ],
+  );
 }
