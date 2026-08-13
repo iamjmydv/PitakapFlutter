@@ -1,5 +1,6 @@
 library;
 
+export 'common_confirm_dialog.dart';
 export 'common_empty_state.dart';
 export 'common_loader.dart';
 export 'common_password_field.dart';

@@ -100,6 +100,9 @@ class SubscriptionsListPage extends ConsumerWidget {
                           subscriptions: subscriptions,
                           onDelete: (subscription) =>
                               _delete(context, ref, subscription),
+                          onOpen: (subscription) => context.push(
+                            AppRoutes.subscriptionDetailPath(subscription.id),
+                          ),
                         ),
                 ),
     );
@@ -109,10 +112,12 @@ class SubscriptionsListPage extends ConsumerWidget {
 class _SubscriptionList extends StatelessWidget {
   final List<SubscriptionEntity> subscriptions;
   final ValueChanged<SubscriptionEntity> onDelete;
+  final ValueChanged<SubscriptionEntity> onOpen;
 
   const _SubscriptionList({
     required this.subscriptions,
     required this.onDelete,
+    required this.onOpen,
   });
 
   @override
@@ -137,7 +142,11 @@ class _SubscriptionList extends StatelessWidget {
           direction: DismissDirection.endToStart,
           onDismissed: (_) => onDelete(subscription),
           background: const _DeleteBackground(),
-          child: SubscriptionTile(subscription: subscription, now: now),
+          child: SubscriptionTile(
+            subscription: subscription,
+            now: now,
+            onTap: () => onOpen(subscription),
+          ),
         );
       },
     );
