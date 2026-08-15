@@ -106,6 +106,12 @@ class Strings {
       'Add your first subscription to see what you are committed to '
       'every month.';
   static const String subscriptionsAddAction = 'Add subscription';
+  static const String filterAll = 'All';
+  static const String sortAction = 'Sort';
+  static const String subscriptionsFilterEmptyTitle = 'Nothing here yet';
+  static const String subscriptionsFilterEmptyMessage =
+      'No subscriptions match this category.';
+  static const String showAllAction = 'Show all';
   static const String subscriptionsLoadFailed =
       'Could not load your subscriptions';
   static const String subscriptionDeleted = 'Subscription deleted';

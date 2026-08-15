@@ -11,6 +11,9 @@ import 'package:pitakapflutter/core/theme/app_theme.dart';
 import 'package:pitakapflutter/feature/subscription/domain/entities/subscription_entity.dart';
 import 'package:pitakapflutter/feature/subscription/domain/usecases/create_subscription_usecase.dart';
 import 'package:pitakapflutter/feature/subscription/domain/usecases/delete_subscription_usecase.dart';
+import 'package:pitakapflutter/feature/subscription/presentation/providers/subscription_list_filter.dart';
+import 'package:pitakapflutter/feature/subscription/presentation/providers/subscription_list_filter_controller.dart';
+import 'package:pitakapflutter/feature/subscription/presentation/widgets/subscription_filter_bar.dart';
 import 'package:pitakapflutter/feature/subscription/presentation/widgets/subscription_tile.dart';
 
 class SubscriptionsListPage extends ConsumerWidget {
@@ -72,9 +75,25 @@ class SubscriptionsListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(authStateProvider).value;
+    final filter = ref.watch(subscriptionListFilterProvider);
+    final controller = ref.read(subscriptionListFilterProvider.notifier);
 
     return Scaffold(
-      appBar: AppBar(title: const Text(Strings.subscriptionsTitle)),
+      appBar: AppBar(
+        title: const Text(Strings.subscriptionsTitle),
+        actions: [
+          PopupMenuButton<SubscriptionSort>(
+            icon: const Icon(Icons.swap_vert),
+            tooltip: Strings.sortAction,
+            initialValue: filter.sort,
+            onSelected: controller.selectSort,
+            itemBuilder: (context) => [
+              for (final sort in SubscriptionSort.values)
+                PopupMenuItem(value: sort, child: Text(sort.label)),
+            ],
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push(AppRoutes.subscriptionNew),
         child: const Icon(Icons.add),
@@ -96,8 +115,10 @@ class SubscriptionsListPage extends ConsumerWidget {
                           title: Strings.subscriptionsEmptyTitle,
                           message: Strings.subscriptionsEmptyMessage,
                         )
-                      : _SubscriptionList(
+                      : _FilteredList(
                           subscriptions: subscriptions,
+                          filter: filter,
+                          onSelectCategory: controller.selectCategory,
                           onDelete: (subscription) =>
                               _delete(context, ref, subscription),
                           onOpen: (subscription) => context.push(
@@ -109,13 +130,17 @@ class SubscriptionsListPage extends ConsumerWidget {
   }
 }
 
-class _SubscriptionList extends StatelessWidget {
+class _FilteredList extends StatelessWidget {
   final List<SubscriptionEntity> subscriptions;
+  final SubscriptionListFilter filter;
+  final ValueChanged<String?> onSelectCategory;
   final ValueChanged<SubscriptionEntity> onDelete;
   final ValueChanged<SubscriptionEntity> onOpen;
 
-  const _SubscriptionList({
+  const _FilteredList({
     required this.subscriptions,
+    required this.filter,
+    required this.onSelectCategory,
     required this.onDelete,
     required this.onOpen,
   });
@@ -124,10 +149,55 @@ class _SubscriptionList extends StatelessWidget {
   Widget build(BuildContext context) {
     final now = DateTime.now();
 
+    final visible = applyListFilter(subscriptions, filter: filter, now: now);
+
+    return Column(
+      children: [
+        SubscriptionFilterBar(
+          categories: availableCategories(subscriptions),
+          selected: filter.category,
+          onSelected: onSelectCategory,
+        ),
+        Expanded(
+          child: visible.isEmpty
+              ? CommonEmptyState(
+                  icon: Icons.filter_alt_off_outlined,
+                  title: Strings.subscriptionsFilterEmptyTitle,
+                  message: Strings.subscriptionsFilterEmptyMessage,
+                  actionLabel: Strings.showAllAction,
+                  onAction: () => onSelectCategory(null),
+                )
+              : _SubscriptionList(
+                  subscriptions: visible,
+                  now: now,
+                  onDelete: onDelete,
+                  onOpen: onOpen,
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SubscriptionList extends StatelessWidget {
+  final List<SubscriptionEntity> subscriptions;
+  final DateTime now;
+  final ValueChanged<SubscriptionEntity> onDelete;
+  final ValueChanged<SubscriptionEntity> onOpen;
+
+  const _SubscriptionList({
+    required this.subscriptions,
+    required this.now,
+    required this.onDelete,
+    required this.onOpen,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.separated(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.md,
-        AppSpacing.md,
+        AppSpacing.sm,
         AppSpacing.md,
         AppSpacing.xl * 2,
       ),
