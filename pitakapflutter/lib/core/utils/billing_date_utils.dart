@@ -4,6 +4,10 @@ DateTime startOfDay(DateTime value) {
   return DateTime(value.year, value.month, value.day);
 }
 
+bool isSameDay(DateTime a, DateTime b) {
+  return a.year == b.year && a.month == b.month && a.day == b.day;
+}
+
 int daysBetween(DateTime from, DateTime to) {
   final start = DateTime.utc(from.year, from.month, from.day);
   final end = DateTime.utc(to.year, to.month, to.day);
