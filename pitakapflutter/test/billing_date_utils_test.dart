@@ -27,6 +27,27 @@ void main() {
     });
   });
 
+  group('isSameDay', () {
+    test('ignores the time on both sides', () {
+      expect(
+        isSameDay(DateTime(2026, 8, 15, 0, 0, 1), DateTime(2026, 8, 15, 23, 59)),
+        isTrue,
+      );
+    });
+
+    test('one minute past midnight is a different day', () {
+      expect(
+        isSameDay(DateTime(2026, 8, 15, 23, 59), DateTime(2026, 8, 16, 0, 1)),
+        isFalse,
+      );
+    });
+
+    test('the same day in a different month or year does not match', () {
+      expect(isSameDay(DateTime(2026, 8, 15), DateTime(2026, 9, 15)), isFalse);
+      expect(isSameDay(DateTime(2025, 8, 15), DateTime(2026, 8, 15)), isFalse);
+    });
+  });
+
   group('daysInMonth', () {
     test('returns the correct length for every month of a common year', () {
       const lengths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
