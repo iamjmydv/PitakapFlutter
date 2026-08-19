@@ -120,6 +120,19 @@ class Strings {
   static const String dueTomorrow = 'Tomorrow';
   static const String perMonthSuffix = '/mo';
   static const String expensesTitle = 'Expenses';
+  static const String expensesPickDate = 'Pick a date';
+  static const String expensesEmptyTodayTitle = 'Nothing logged yet';
+  static const String expensesEmptyTodayMessage =
+      'Log your first expense for today.';
+  static const String expensesEmptyPastTitle = 'Nothing logged';
+  static const String expensesEmptyPastMessage =
+      'You did not record any spending on this day.';
+  static const String expensesLoadFailed = 'Could not load your expenses';
+  static const String expenseDeleted = 'Expense deleted';
+  static const String dayToday = 'Today';
+  static const String dayYesterday = 'Yesterday';
+  static const String entrySingular = 'entry';
+  static const String entryPlural = 'entries';
   static const String statsTitle = 'Statistics';
   static const String settingsTitle = 'Settings';
 

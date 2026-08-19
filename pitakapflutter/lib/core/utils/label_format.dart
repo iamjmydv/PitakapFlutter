@@ -3,3 +3,9 @@ String categoryLabel(String category) {
 
   return category[0].toUpperCase() + category.substring(1);
 }
+
+const Map<String, String> _paymentMethodLabels = {'gcash': 'GCash'};
+
+String paymentMethodLabel(String paymentMethod) {
+  return _paymentMethodLabels[paymentMethod] ?? categoryLabel(paymentMethod);
+}
