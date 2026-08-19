@@ -138,20 +138,32 @@ void main() {
   group('sort menu', () {
     testWidgets('the page applies the default next-due sort', (tester) async {
       final items = [
-        sub(name: 'Day 28', firstBillDate: DateTime(2024, 1, 28)),
         sub(name: 'Day 2', firstBillDate: DateTime(2024, 1, 2)),
+        sub(name: 'Day 28', firstBillDate: DateTime(2024, 1, 28)),
         sub(name: 'Day 17', firstBillDate: DateTime(2024, 1, 17)),
       ];
+
+      final now = DateTime.now();
 
       await pumpList(tester, Stream.value(items));
 
       final expected = applyListFilter(
         items,
         filter: const SubscriptionListFilter(),
-        now: DateTime.now(),
+        now: now,
       ).map((s) => s.name).toList();
 
       expect(visibleNames(tester), expected);
+
+      final renderedDueDates = visibleNames(tester)
+          .map((name) => items.firstWhere((s) => s.name == name))
+          .map((s) => s.nextDueDateAsOf(now))
+          .toList();
+
+      expect(
+        renderedDueDates,
+        orderedEquals(List<DateTime>.of(renderedDueDates)..sort()),
+      );
       expect(visibleNames(tester), isNot(items.map((s) => s.name).toList()));
     });
 

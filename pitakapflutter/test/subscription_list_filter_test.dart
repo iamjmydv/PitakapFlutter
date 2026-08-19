@@ -253,4 +253,76 @@ void main() {
       );
     });
   });
+
+  group('next-due sort is a cyclic rotation of the day-ascending order', () {
+    final fixture = [
+      sub(name: 'Day 2', firstBillDate: DateTime(2024, 1, 2)),
+      sub(name: 'Day 28', firstBillDate: DateTime(2024, 1, 28)),
+      sub(name: 'Day 17', firstBillDate: DateTime(2024, 1, 17)),
+    ];
+
+    List<String> sortedOn(DateTime now) {
+      return names(
+        applyListFilter(
+          fixture,
+          filter: const SubscriptionListFilter(),
+          now: now,
+        ),
+      );
+    }
+
+    test('an ascending fixture WOULD collide, which is why it is not used', () {
+      final ascending = [
+        sub(name: 'Day 2', firstBillDate: DateTime(2024, 1, 2)),
+        sub(name: 'Day 17', firstBillDate: DateTime(2024, 1, 17)),
+        sub(name: 'Day 28', firstBillDate: DateTime(2024, 1, 28)),
+      ];
+
+      final collisions = <DateTime>[];
+
+      for (var offset = 0; offset < 366; offset++) {
+        final now = DateTime(2026, 1, 1 + offset);
+        final sorted = names(
+          applyListFilter(
+            ascending,
+            filter: const SubscriptionListFilter(),
+            now: now,
+          ),
+        );
+
+        if (sorted.toString() == names(ascending).toString()) {
+          collisions.add(now);
+        }
+      }
+
+      expect(collisions, isNotEmpty);
+    });
+
+    test('the chosen fixture never comes back in its own order', () {
+      final inputOrder = names(fixture).toString();
+
+      for (var offset = 0; offset < 366; offset++) {
+        final now = DateTime(2026, 1, 1 + offset);
+
+        expect(
+          sortedOn(now).toString(),
+          isNot(inputOrder),
+          reason: 'fixture order survived the sort on $now',
+        );
+      }
+    });
+
+    test('the result is always ascending by next due date', () {
+      for (var offset = 0; offset < 366; offset++) {
+        final now = DateTime(2026, 1, 1 + offset);
+
+        final due = sortedOn(now)
+            .map((name) => fixture.firstWhere((s) => s.name == name))
+            .map((s) => s.nextDueDateAsOf(now))
+            .toList();
+
+        expect(due, orderedEquals(List<DateTime>.of(due)..sort()));
+      }
+    });
+  });
 }
