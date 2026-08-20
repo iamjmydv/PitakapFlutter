@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pitakapflutter/core/common/common.dart';
 import 'package:pitakapflutter/core/error/failure.dart';
 import 'package:pitakapflutter/core/providers/auth_providers.dart';
 import 'package:pitakapflutter/core/providers/expense_providers.dart';
 import 'package:pitakapflutter/core/resources/strings.dart';
+import 'package:pitakapflutter/core/router/app_routes.dart';
 import 'package:pitakapflutter/core/theme/app_theme.dart';
 import 'package:pitakapflutter/core/utils/billing_date_utils.dart';
 import 'package:pitakapflutter/feature/expense/domain/entities/expense_entity.dart';
@@ -106,7 +108,7 @@ class ExpensesPage extends ConsumerWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => context.push(AppRoutes.expenseNew),
         child: const Icon(Icons.add),
       ),
       body: Column(
@@ -142,6 +144,10 @@ class ExpensesPage extends ConsumerWidget {
                           today: today,
                           expenses: expenses,
                           onDelete: (expense) => _delete(context, ref, expense),
+                          onOpen: (expense) => context.push(
+                            AppRoutes.expenseNew,
+                            extra: expense,
+                          ),
                         ),
                       ),
           ),
@@ -156,12 +162,14 @@ class _DayBody extends StatelessWidget {
   final DateTime today;
   final List<ExpenseEntity> expenses;
   final ValueChanged<ExpenseEntity> onDelete;
+  final ValueChanged<ExpenseEntity> onOpen;
 
   const _DayBody({
     required this.day,
     required this.today,
     required this.expenses,
     required this.onDelete,
+    required this.onOpen,
   });
 
   @override
@@ -183,7 +191,11 @@ class _DayBody extends StatelessWidget {
                       ? Strings.expensesEmptyTodayMessage
                       : Strings.expensesEmptyPastMessage,
                 )
-              : _ExpenseList(expenses: expenses, onDelete: onDelete),
+              : _ExpenseList(
+                  expenses: expenses,
+                  onDelete: onDelete,
+                  onOpen: onOpen,
+                ),
         ),
       ],
     );
@@ -193,8 +205,13 @@ class _DayBody extends StatelessWidget {
 class _ExpenseList extends StatelessWidget {
   final List<ExpenseEntity> expenses;
   final ValueChanged<ExpenseEntity> onDelete;
+  final ValueChanged<ExpenseEntity> onOpen;
 
-  const _ExpenseList({required this.expenses, required this.onDelete});
+  const _ExpenseList({
+    required this.expenses,
+    required this.onDelete,
+    required this.onOpen,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +233,10 @@ class _ExpenseList extends StatelessWidget {
           direction: DismissDirection.endToStart,
           onDismissed: (_) => onDelete(expense),
           background: const _DeleteBackground(),
-          child: ExpenseTile(expense: expense),
+          child: ExpenseTile(
+            expense: expense,
+            onTap: () => onOpen(expense),
+          ),
         );
       },
     );

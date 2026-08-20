@@ -133,6 +133,19 @@ class Strings {
   static const String dayYesterday = 'Yesterday';
   static const String entrySingular = 'entry';
   static const String entryPlural = 'entries';
+
+  static const String expenseAddTitle = 'Add expense';
+  static const String expenseEditTitle = 'Edit expense';
+  static const String expenseSaveAction = 'Save expense';
+  static const String expenseAmountLabel = 'Amount';
+  static const String expenseCategoryLabel = 'Category';
+  static const String expenseDescriptionLabel = 'Description';
+  static const String expenseDescriptionHint = 'e.g. Lunch at Jollibee';
+  static const String expenseDateLabel = 'Date';
+  static const String expensePaymentMethodLabel = 'Payment method';
+  static const String expenseDescriptionRequired = 'Description is required';
+  static const String expenseCreated = 'Expense added';
+  static const String expenseUpdated = 'Expense updated';
   static const String statsTitle = 'Statistics';
   static const String settingsTitle = 'Settings';
 
