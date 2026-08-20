@@ -8,6 +8,8 @@ import 'package:pitakapflutter/feature/auth/presentation/forgot_password/forgot_
 import 'package:pitakapflutter/feature/auth/presentation/login/login_page.dart';
 import 'package:pitakapflutter/feature/auth/presentation/sign_up/sign_up_page.dart';
 import 'package:pitakapflutter/feature/dashboard/presentation/dashboard_page.dart';
+import 'package:pitakapflutter/feature/expense/domain/entities/expense_entity.dart';
+import 'package:pitakapflutter/feature/expense/presentation/expense_edit_page.dart';
 import 'package:pitakapflutter/feature/expense/presentation/expenses_page.dart';
 import 'package:pitakapflutter/feature/onboarding/presentation/onboarding_page.dart';
 import 'package:pitakapflutter/feature/profile/presentation/settings_page.dart';
@@ -89,6 +91,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           subscriptionId:
               state.pathParameters[AppRoutes.subscriptionIdParam] ?? '',
         ),
+      ),
+      GoRoute(
+        path: AppRoutes.expenseNew,
+        builder: (context, state) =>
+            ExpenseEditPage(expense: state.extra as ExpenseEntity?),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>

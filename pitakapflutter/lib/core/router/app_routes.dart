@@ -11,6 +11,8 @@ abstract final class AppRoutes {
 
   static String subscriptionDetailPath(String id) => '/subscription/detail/$id';
 
+  static const String expenseNew = '/expense/new';
+
   static const String emailQueryParam = 'email';
   static const String dashboard = '/dashboard';
   static const String subscriptions = '/subscriptions';
