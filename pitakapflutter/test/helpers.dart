@@ -58,9 +58,11 @@ void registerAuthFallbacks() {
 List<Override> authOverrides({
   String? signedInUid,
   AuthRepository? repository,
+  UserDetailsEntity? userDetails = testUser,
 }) {
   return [
     authStateProvider.overrideWith((ref) => Stream.value(signedInUid)),
+    userDetailsProvider.overrideWith((ref, uid) => Stream.value(userDetails)),
     if (repository != null)
       authRepositoryProvider.overrideWithValue(repository),
   ];
@@ -153,6 +155,7 @@ Future<Widget> appWith(
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
       ...authOverrides(signedInUid: signedInUid),
+      ...featureOverrides(),
     ],
     child: const PitakapApp(),
   );
@@ -195,6 +198,7 @@ Future<ProviderContainer> pumpAppAt(
   Map<String, Object> values = onboarded,
   String? signedInUid,
   AuthRepository? repository,
+  UserDetailsEntity? userDetails = testUser,
   SubscriptionRepository? subscriptionRepository,
   ExpenseRepository? expenseRepository,
   List<Override> extraOverrides = const [],
@@ -202,9 +206,14 @@ Future<ProviderContainer> pumpAppAt(
   SharedPreferences.setMockInitialValues(values);
   final prefs = await SharedPreferences.getInstance();
   final container = ProviderContainer(
+    retry: (retryCount, error) => null,
     overrides: [
       sharedPreferencesProvider.overrideWithValue(prefs),
-      ...authOverrides(signedInUid: signedInUid, repository: repository),
+      ...authOverrides(
+        signedInUid: signedInUid,
+        repository: repository,
+        userDetails: userDetails,
+      ),
       ...featureOverrides(
         subscriptions: subscriptionRepository,
         expenses: expenseRepository,
