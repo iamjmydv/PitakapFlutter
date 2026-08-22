@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pitakapflutter/feature/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:pitakapflutter/feature/auth/data/repository/auth_repository_impl.dart';
+import 'package:pitakapflutter/feature/auth/domain/entities/user_details_entity.dart';
 import 'package:pitakapflutter/feature/auth/domain/repository/auth_repository.dart';
 import 'package:pitakapflutter/feature/auth/domain/usecases/login_user_usecase.dart';
 import 'package:pitakapflutter/feature/auth/domain/usecases/send_password_reset_usecase.dart';
@@ -11,6 +12,7 @@ import 'package:pitakapflutter/feature/auth/domain/usecases/sign_in_with_google_
 import 'package:pitakapflutter/feature/auth/domain/usecases/sign_out_usecase.dart';
 import 'package:pitakapflutter/feature/auth/domain/usecases/sign_up_user_usecase.dart';
 import 'package:pitakapflutter/feature/auth/domain/usecases/watch_auth_state_usecase.dart';
+import 'package:pitakapflutter/feature/auth/domain/usecases/watch_user_details_usecase.dart';
 
 final firebaseAuthProvider = Provider<FirebaseAuth>(
   (ref) => FirebaseAuth.instance,
@@ -42,6 +44,14 @@ final watchAuthStateUseCaseProvider = Provider<WatchAuthStateUseCase>(
 
 final authStateProvider = StreamProvider<String?>(
   (ref) => ref.watch(watchAuthStateUseCaseProvider).call(),
+);
+
+final watchUserDetailsUseCaseProvider = Provider<WatchUserDetailsUseCase>(
+  (ref) => WatchUserDetailsUseCase(ref.watch(authRepositoryProvider)),
+);
+
+final userDetailsProvider = StreamProvider.family<UserDetailsEntity?, String>(
+  (ref, uid) => ref.watch(watchUserDetailsUseCaseProvider).call(uid),
 );
 
 final loginUserUseCaseProvider = Provider<LoginUserUseCase>(

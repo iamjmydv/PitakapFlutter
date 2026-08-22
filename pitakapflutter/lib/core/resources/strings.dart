@@ -63,7 +63,19 @@ class Strings {
   static const String navStats = 'Stats';
   static const String navSettings = 'Settings';
 
-  static const String dashboardTitle = 'Dashboard';
+  static const String greetingMorning = 'Good morning,';
+  static const String greetingAfternoon = 'Good afternoon,';
+  static const String greetingEvening = 'Good evening,';
+  static const String spentTodayLabel = 'SPENT TODAY';
+  static const String subsPerMonthLabel = 'Subs per month';
+  static const String subsPerYearLabel = 'Subs per year';
+  static const String upcomingPaymentsLabel = 'Upcoming payments';
+  static const String seeAllAction = 'See all';
+  static const String activeSuffix = 'active';
+  static const String dashboardEmptyTitle = 'Nothing tracked yet';
+  static const String dashboardEmptyMessage =
+      'Add a subscription or log an expense and your numbers will appear here.';
+  static const String dashboardLoadFailed = 'Could not load your dashboard';
   static const String subscriptionAddTitle = 'Add subscription';
   static const String subscriptionEditTitle = 'Edit subscription';
   static const String subscriptionSaveAction = 'Save subscription';

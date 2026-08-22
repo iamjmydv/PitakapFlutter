@@ -124,7 +124,7 @@ void main() {
       await pumpPastSplash(tester);
 
       expect(find.byType(NavigationBar), findsOneWidget);
-      expect(find.text(Strings.dashboardTitle), findsWidgets);
+      expect(find.text(Strings.subsPerMonthLabel), findsWidgets);
       expect(find.text(Strings.appTagline), findsNothing);
     });
 
@@ -139,7 +139,7 @@ void main() {
         Icons.account_balance_wallet_outlined: Strings.expensesTitle,
         Icons.pie_chart_outline: Strings.statsTitle,
         Icons.settings_outlined: Strings.settingsTitle,
-        Icons.home_outlined: Strings.dashboardTitle,
+        Icons.home_outlined: Strings.subsPerMonthLabel,
       };
 
       for (final tab in tabs.entries) {
@@ -168,7 +168,7 @@ void main() {
       await tester.tap(find.byIcon(Icons.home_outlined));
       await tester.pumpAndSettle();
 
-      expect(find.text(Strings.dashboardTitle), findsWidgets);
+      expect(find.text(Strings.subsPerMonthLabel), findsWidgets);
       expect(find.text(Strings.statsTitle), findsNothing);
       expect(
         find.text(Strings.statsTitle, skipOffstage: false),

@@ -6,6 +6,8 @@ import 'package:pitakapflutter/feature/auth/domain/usecases/sign_up_user_usecase
 abstract interface class AuthRepository {
   Stream<String?> authStateChanges();
 
+  Stream<UserDetailsEntity?> watchUserDetails(String uid);
+
   Future<UserDetailsEntity> signUp(SignUpUseCaseParams params);
 
   Future<UserDetailsEntity> login(LoginUseCaseParams params);

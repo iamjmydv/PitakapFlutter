@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pitakapflutter/core/error/failure.dart';
+import 'package:pitakapflutter/core/error/firestore_error_mapper.dart';
 import 'package:pitakapflutter/core/resources/keys.dart';
 import 'package:pitakapflutter/core/utils/display_name.dart';
 import 'package:pitakapflutter/feature/auth/data/datasources/auth_error_mapper.dart';
@@ -12,6 +13,8 @@ import 'package:pitakapflutter/feature/auth/domain/usecases/sign_up_user_usecase
 
 abstract interface class AuthRemoteDatasource {
   Stream<String?> authStateChanges();
+
+  Stream<UserDetailsModel?> watchUserDetails(String uid);
 
   Future<UserDetailsModel> signUp(SignUpUseCaseParams params);
 
@@ -50,6 +53,17 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   @override
   Stream<String?> authStateChanges() {
     return auth.authStateChanges().map((user) => user?.uid);
+  }
+
+  @override
+  Stream<UserDetailsModel?> watchUserDetails(String uid) {
+    return _userDoc(uid)
+        .snapshots()
+        .map(
+          (snapshot) =>
+              snapshot.exists ? UserDetailsModel.fromDoc(snapshot) : null,
+        )
+        .handleError((Object error) => throw FirestoreErrorMapper.from(error));
   }
 
   @override
