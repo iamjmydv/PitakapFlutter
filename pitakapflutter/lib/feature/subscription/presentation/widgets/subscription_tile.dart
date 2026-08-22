@@ -19,10 +19,14 @@ class SubscriptionTile extends StatelessWidget {
 
   static const int soonThresholdDays = 3;
 
-  static String dueLabel(int daysUntil, DateTime dueDate) {
+  static String dueLabel(
+    int daysUntil,
+    DateTime dueDate, {
+    int wordsWithinDays = soonThresholdDays,
+  }) {
     if (daysUntil <= 0) return Strings.dueToday;
     if (daysUntil == 1) return Strings.dueTomorrow;
-    if (daysUntil <= soonThresholdDays) return 'in $daysUntil days';
+    if (daysUntil <= wordsWithinDays) return 'in $daysUntil days';
 
     return DateFormat('MMM d').format(dueDate);
   }

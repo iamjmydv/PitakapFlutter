@@ -14,6 +14,11 @@ class AuthRepositoryImpl implements AuthRepository {
   Stream<String?> authStateChanges() => remote.authStateChanges();
 
   @override
+  Stream<UserDetailsEntity?> watchUserDetails(String uid) {
+    return remote.watchUserDetails(uid);
+  }
+
+  @override
   Future<UserDetailsEntity> signUp(SignUpUseCaseParams params) {
     return remote.signUp(params);
   }
